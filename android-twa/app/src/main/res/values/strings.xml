@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">J Creator Shield</string>
+    <string name="launchUrl">https://creatorshields.com</string>
     <string name="asset_statements">
         [{
             \"relation\": [\"delegate_permission/common.handle_all_urls\"],
             \"target\": {
                 \"namespace\": \"android_app\",
                 \"package_name\": \"com.creatorshields.app\",
-                \"sha256_cert_fingerprints\": []
+                \"sha256_cert_fingerprints\": [\"E6:B9:BD:A3:C2:93:A6:A2:2B:AD:AC:05:DC:A7:EF:1C:09:AA:3B:38:FA:DD:6D:C8:85:CA:3F:50:15:28:85:D3\"]
             }
         }]
     </string>
