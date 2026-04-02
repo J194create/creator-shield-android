@@ -47,21 +47,21 @@ jobs:
             -storepass "CreatorShield2026!" 2>&1 | grep "SHA256:" | tee sha256-fingerprint.txt
           echo "========================================"
 
-      - name: Build release APK
+      - name: Build release AAB
         working-directory: android-twa
         run: |
-          gradle assembleRelease \
+          gradle bundleRelease \
             -PKEYSTORE_PATH=android.keystore \
             -PKEYSTORE_PASS="CreatorShield2026!" \
             -PKEY_ALIAS=creatorshield \
             -PKEY_PASS="CreatorShield2026!" \
             --stacktrace
 
-      - name: Upload APK + SHA-256 fingerprint
+      - name: Upload AAB + SHA-256 fingerprint
         uses: actions/upload-artifact@v4
         with:
           name: creator-shield-android-v${{ github.run_number }}
           path: |
-            android-twa/app/build/outputs/apk/release/*.apk
+            android-twa/app/build/outputs/bundle/release/*.aab
             sha256-fingerprint.txt
           retention-days: 30
