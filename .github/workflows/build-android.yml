@@ -25,21 +25,12 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Generate signing keystore
+      - name: Copy permanent signing keystore
         run: |
-          keytool -genkeypair \
-            -alias creatorshield \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 10000 \
-            -storepass "CreatorShield2026!" \
-            -keypass "CreatorShield2026!" \
-            -dname "CN=Creator Shield, OU=Developer, O=Creator Shield, L=Addis Ababa, ST=Addis Ababa, C=ET" \
-            -keystore android-twa/app/android.keystore
-
+          cp keystore/creatorshield.keystore android-twa/app/android.keystore
           echo ""
           echo "========================================"
-          echo " SHA-256 Fingerprint — ADD TO assetlinks.json"
+          echo " SHA-256 Fingerprint (permanent keystore)"
           echo "========================================"
           keytool -list -v \
             -keystore android-twa/app/android.keystore \
