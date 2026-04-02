@@ -51,7 +51,7 @@ jobs:
         working-directory: android-twa
         run: |
           gradle assembleRelease \
-            -PKEYSTORE_PATH=app/android.keystore \
+            -PKEYSTORE_PATH=android.keystore \
             -PKEYSTORE_PASS="CreatorShield2026!" \
             -PKEY_ALIAS=creatorshield \
             -PKEY_PASS="CreatorShield2026!" \
