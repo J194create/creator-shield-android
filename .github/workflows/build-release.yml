@@ -29,12 +29,12 @@ jobs:
 
       - name: Build release APK
         working-directory: android-twa
-        run: gradle assembleRelease --no-daemon
-        env:
-          KEYSTORE_PATH: ../keystore/android.keystore
-          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASS: ${{ secrets.KEY_PASS }}
+        run: |
+          gradle assembleRelease --no-daemon \
+            -PKEYSTORE_PATH=../keystore/android.keystore \
+            -PKEYSTORE_PASS=${{ secrets.KEYSTORE_PASS }} \
+            -PKEY_ALIAS=${{ secrets.KEY_ALIAS }} \
+            -PKEY_PASS=${{ secrets.KEY_PASS }}
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -45,12 +45,12 @@ jobs:
 
       - name: Build release AAB (for Play Store)
         working-directory: android-twa
-        run: gradle bundleRelease --no-daemon
-        env:
-          KEYSTORE_PATH: ../keystore/android.keystore
-          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASS: ${{ secrets.KEY_PASS }}
+        run: |
+          gradle bundleRelease --no-daemon \
+            -PKEYSTORE_PATH=../keystore/android.keystore \
+            -PKEYSTORE_PASS=${{ secrets.KEYSTORE_PASS }} \
+            -PKEY_ALIAS=${{ secrets.KEY_ALIAS }} \
+            -PKEY_PASS=${{ secrets.KEY_PASS }}
 
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v4
