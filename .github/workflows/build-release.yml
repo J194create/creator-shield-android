@@ -36,16 +36,11 @@ jobs:
         working-directory: android-twa
         run: chmod +x ./gradlew
 
-      - name: Decode keystore
-        working-directory: android-twa
-        run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android.keystore
-
       - name: Build release APK
         working-directory: android-twa
         run: ./gradlew assembleRelease --no-daemon
         env:
-          KEYSTORE_PATH: android.keystore
+          KEYSTORE_PATH: ../keystore/android.keystore
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASS: ${{ secrets.KEY_PASS }}
@@ -61,7 +56,7 @@ jobs:
         working-directory: android-twa
         run: ./gradlew bundleRelease --no-daemon
         env:
-          KEYSTORE_PATH: android.keystore
+          KEYSTORE_PATH: ../keystore/android.keystore
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASS: ${{ secrets.KEY_PASS }}
