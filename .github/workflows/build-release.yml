@@ -27,14 +27,11 @@ jobs:
         with:
           gradle-version: '8.2'
 
-      - name: List keystore folder
-        run: ls -la $GITHUB_WORKSPACE/keystore/ || echo "keystore folder not found"
-
       - name: Build release APK
         working-directory: android-twa
         run: |
           gradle assembleRelease --no-daemon \
-            -PKEYSTORE_PATH=$GITHUB_WORKSPACE/keystore/android.keystore \
+            -PKEYSTORE_PATH=$GITHUB_WORKSPACE/keystore/creatorshield.keystore \
             -PKEYSTORE_PASS=${{ secrets.KEYSTORE_PASS }} \
             -PKEY_ALIAS=${{ secrets.KEY_ALIAS }} \
             -PKEY_PASS=${{ secrets.KEY_PASS }}
@@ -50,7 +47,7 @@ jobs:
         working-directory: android-twa
         run: |
           gradle bundleRelease --no-daemon \
-            -PKEYSTORE_PATH=$GITHUB_WORKSPACE/keystore/android.keystore \
+            -PKEYSTORE_PATH=$GITHUB_WORKSPACE/keystore/creatorshield.keystore \
             -PKEYSTORE_PASS=${{ secrets.KEYSTORE_PASS }} \
             -PKEY_ALIAS=${{ secrets.KEY_ALIAS }} \
             -PKEY_PASS=${{ secrets.KEY_PASS }}
