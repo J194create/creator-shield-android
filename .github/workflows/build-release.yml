@@ -1,0 +1,74 @@
+name: Build & Sign Release APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Make gradlew executable
+        working-directory: android-twa
+        run: chmod +x ./gradlew
+
+      - name: Decode keystore
+        working-directory: android-twa
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android.keystore
+
+      - name: Build release APK
+        working-directory: android-twa
+        run: ./gradlew assembleRelease --no-daemon
+        env:
+          KEYSTORE_PATH: android.keystore
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.KEY_PASS }}
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: creator-shield-v1.0.6-release
+          path: android-twa/app/build/outputs/apk/release/*.apk
+          retention-days: 14
+
+      - name: Build release AAB (for Play Store)
+        working-directory: android-twa
+        run: ./gradlew bundleRelease --no-daemon
+        env:
+          KEYSTORE_PATH: android.keystore
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.KEY_PASS }}
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: creator-shield-v1.0.6-release-bundle
+          path: android-twa/app/build/outputs/bundle/release/*.aab
+          retention-days: 14
